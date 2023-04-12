@@ -30,7 +30,7 @@ class Tool(Plugin):
             return help_text
         trigger_prefix = conf().get('plugin_trigger_prefix', "$")
         help_text += "使用说明：\n"
-        help_text += f"{trigger_prefix}tool "+"{命令}: 根据给出的命令使用一些可用工具尽力为你得到结果。\n"
+        help_text += f"{trigger_prefix}tool "+"命令: 根据给出的{命令}使用一些可用工具尽力为你得到结果。\n"
         help_text += f"{trigger_prefix}tool reset: 重置工具。\n"
         return help_text
 
@@ -121,6 +121,7 @@ class Tool(Plugin):
         return {
             "openai_api_key": conf().get("open_ai_api_key", ""),
             "proxy": conf().get("proxy", ""),
+            "request_timeout": conf().get("request_timeout", 60),
             # note: 目前tool暂未对其他模型测试，但这里仍对配置来源做了优先级区分，一般插件配置可覆盖全局配置
             "model_name": tool_model_name if tool_model_name else conf().get("model", "gpt-3.5-turbo"),
             "no_default": kwargs.get("no_default", False),
@@ -136,6 +137,12 @@ class Tool(Plugin):
             "searx_host": kwargs.get("searx_host", ""),
             # for wolfram-alpha tool
             "wolfram_alpha_appid": kwargs.get("wolfram_alpha_appid", ""),
+            # for morning-news tool
+            "zaobao_api_key": kwargs.get("zaobao_api_key", ""),
+            # for visual_dl tool
+            "cuda_device": kwargs.get("cuda_device", "cpu"),
+            # for browser tool
+            "phantomjs_exec_path": kwargs.get("phantomjs_exec_path", ""),
         }
 
     def _filter_tool_list(self, tool_list: list):
